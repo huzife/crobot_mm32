@@ -137,6 +137,15 @@ void TIM8_UP_IRQHandler (void)
 //-------------------------------------------------------------------------------------------------------------------
 void UART1_IRQHandler (void)
 {
+    // 串口接收空闲中断
+    if (UART_ISR_RXIDLEINTF_MASK & UART_GetInterruptStatus(UART1)) {
+        extern void uart1_irq_handler();
+        uart1_irq_handler();
+        
+        // 清除空闲中断标志位
+        UART_ClearInterruptStatus(UART1, UART_ISR_RXIDLEINTF_MASK);    
+    }
+
     if(UART_INT_TX_EMPTY & UART_GetInterruptStatus(UART1))                      // 串口发送缓冲空中断
     {
         // 此处编写用户代码

@@ -58,9 +58,9 @@ void DMAInit(dma_channel_enum ch, uint8_t dir, uint8_t bytes, uint32_t count, ui
 }
 
 void DMA1_CH4_Handler() {
-    debug_tx_done = true;
+    com_tx_done = true;
 }
 
 void DMA1_CH5_Handler() {
-    debug_rx_done = true;
+    com_rx_done = true;
 }

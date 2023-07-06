@@ -11,7 +11,8 @@
 #define DMA_DIR_P2M 0u
 #define DMA_DIR_M2P 1u
 
-#define EnableDMA(ch) dma_enable(ch)
+#define enableDMA(ch) dma_enable(ch)
+#define disableDMA(ch) dma_disable(ch)
 
 void DMAInit(dma_channel_enum ch, uint8 dir, uint8 bytes, uint32 count, uint32 p_add, uint32 m_add);
 

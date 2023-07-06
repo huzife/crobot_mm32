@@ -5,7 +5,7 @@
 
 #define VELOCITY_CONTROL_T  5       //速度闭环控制周期 ms
 #define RPM_MAX             300.0f  //电机最大转速 rpm
-#define COUNTS_PER_REV      144000  //电机输出轴转一圈编码器计数值89600  144000
+#define COUNTS_PER_REV      89600   //电机输出轴转一圈编码器计数值89600  144000
 
 // 参数转化: PID_H = 编码器计数(每个周期) / 转速(每分钟)
 #define PID_H (float)(COUNTS_PER_REV * VELOCITY_CONTROL_T / 60000.0f)

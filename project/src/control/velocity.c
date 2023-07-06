@@ -50,34 +50,34 @@ void velocityControl(Velocity *vel) {
     // PID计算
     // 电机1
     float v1 = fabs(vel->m1_set_rpm);
-    if (v1 < 18.0f) setIncPID(&pid1, 24.656, 3.674, 3.168);
-    else if (v1 < 30.0f) setIncPID(&pid1, 25.825, 3.255, 3.168);
-    else if (v1 < 38.5f) setIncPID(&pid1, 24.656, 3.880, 3.168);
-    else if (v1 < 50.5f) setIncPID(&pid1, 24.656, 4.055, 3.168);
+    if (v1 < 28.8f) setIncPID(&pid1, 22.568, 3.674, 3.168);
+    else if (v1 < 48.0f) setIncPID(&pid1, 25.825, 3.255, 3.168);
+    else if (v1 < 61.5f) setIncPID(&pid1, 24.656, 3.880, 3.168);
+    else if (v1 < 80.8f) setIncPID(&pid1, 24.656, 4.055, 3.168);
     else setIncPID(&pid1, 25.156, 4.891, 3.168);
     
     // 电机2
     float v2 = fabs(vel->m2_set_rpm);
-    if (v2 < 18.0f) setIncPID(&pid2, 24.656, 3.674, 3.168);
-    else if (v2 < 30.0f) setIncPID(&pid2, 25.825, 3.255, 3.168);
-    else if (v2 < 38.5f) setIncPID(&pid2, 24.656, 3.880, 3.168);
-    else if (v2 < 50.5f) setIncPID(&pid2, 24.656, 4.055, 3.168);
+    if (v2 < 28.8f) setIncPID(&pid2, 22.568, 3.674, 3.168);
+    else if (v2 < 48.0f) setIncPID(&pid2, 25.825, 3.255, 3.168);
+    else if (v2 < 61.5f) setIncPID(&pid2, 24.656, 3.880, 3.168);
+    else if (v2 < 80.8f) setIncPID(&pid2, 24.656, 4.055, 3.168);
     else setIncPID(&pid2, 25.156, 4.891, 3.168);
     
     // 电机3
     float v3 = fabs(vel->m3_set_rpm);
-    if (v3 < 18.0f) setIncPID(&pid3, 24.656, 3.674, 3.168);
-    else if (v3 < 30.0f) setIncPID(&pid3, 25.825, 3.255, 3.168);
-    else if (v3 < 38.5f) setIncPID(&pid3, 24.656, 3.880, 3.168);
-    else if (v3 < 50.5f) setIncPID(&pid3, 24.656, 4.055, 3.168);
+    if (v3 < 28.8f) setIncPID(&pid3, 22.568, 3.674, 3.168);
+    else if (v3 < 48.0f) setIncPID(&pid3, 25.825, 3.255, 3.168);
+    else if (v3 < 61.5f) setIncPID(&pid3, 24.656, 3.880, 3.168);
+    else if (v3 < 80.8f) setIncPID(&pid3, 24.656, 4.055, 3.168);
     else setIncPID(&pid3, 25.156, 4.891, 3.168);
     
     // 电机4
     float v4 = fabs(vel->m4_set_rpm);
-    if (v4 < 18.0f) setIncPID(&pid4, 24.656, 3.674, 3.168);
-    else if (v4 < 30.0f) setIncPID(&pid4, 25.825, 3.255, 3.168);
-    else if (v4 < 38.5f) setIncPID(&pid4, 24.656, 3.880, 3.168);
-    else if (v4 < 50.5f) setIncPID(&pid4, 24.656, 4.055, 3.168);
+    if (v4 < 28.8f) setIncPID(&pid4, 22.568, 3.674, 3.168);
+    else if (v4 < 48.0f) setIncPID(&pid4, 25.825, 3.255, 3.168);
+    else if (v4 < 61.5f) setIncPID(&pid4, 24.656, 3.880, 3.168);
+    else if (v4 < 80.8f) setIncPID(&pid4, 24.656, 4.055, 3.168);
     else setIncPID(&pid4, 25.156, 4.891, 3.168);
     
     // 计算PWM输出

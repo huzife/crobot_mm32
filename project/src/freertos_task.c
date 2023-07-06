@@ -4,8 +4,6 @@
 #include "task.h"
 #include "stdio.h"
 
-float speed;
-
 // 交换字节
 void swap(uint8_t *a, uint8_t *b) {
     uint8_t temp = *a;
@@ -49,15 +47,14 @@ void kinematicsTask(void *pvParameters) {
     
     uint32 i = 0;
     uint8 stop = false;
-    kinematics_inverse.angular_z = 0;
-    speed = 0;
+    kinematics_inverse.linear_x = 0;
     
     while (true) {
         vTaskDelay(1);
         
         if (++i == 200) {
             i = 0;
-            kinematics_inverse.angular_z = stop ? 0 : speed;
+            kinematics_inverse.linear_x = stop ? 0 : 0.1f;
             stop = !stop;
         }
         
@@ -90,87 +87,39 @@ void kinematicsTask(void *pvParameters) {
     }
 }
 
-// 输出目标转速和实际转速的波形
-void debugTxTask(void *pvParameters) {
+void testTask(void *pvParameters) {
     taskENTER_CRITICAL();
-    debug_tx_done = true;
+    testUartInit();
+    disableDMA(COM_UART_TX_CH);
+    com_tx_done = true;
+    com_rx_idle = false;
     taskEXIT_CRITICAL();
     
     while (true) {
-        if (debug_tx_done) {
-            float x;
-            // 电机1
-            x = kinematics_inverse.m1_rpm;
-            memcpy(debug_tx_data, &x, 4);
-            x = kinematics_forward.m1_rpm;
-            memcpy(debug_tx_data + 4, &x, 4);
-            // 电机2
-            x = kinematics_inverse.m2_rpm;
-            memcpy(debug_tx_data + 8, &x, 4);
-            x = kinematics_forward.m2_rpm;
-            memcpy(debug_tx_data + 12, &x, 4);
-            // 电机3
-            x = kinematics_inverse.m3_rpm;
-            memcpy(debug_tx_data + 16, &x, 4);
-            x = kinematics_forward.m3_rpm;
-            memcpy(debug_tx_data + 20, &x, 4);
-            // 电机4
-            x = kinematics_inverse.m4_rpm;
-            memcpy(debug_tx_data + 24, &x, 4);
-            x = kinematics_forward.m4_rpm;
-            memcpy(debug_tx_data + 28, &x, 4);
-            
-            debug_tx_done = false;
+        if (com_tx_done) {
+            memcpy((uint8_t *)com_tx_data, (uint8_t *)&kinematics_inverse.linear_x, 4);
+            memcpy((uint8_t *)(com_tx_data + 4), (uint8_t *)&kinematics_forward.linear_x, 4);
+            memcpy((uint8_t *)(com_tx_data + 8), (uint8_t *)&kinematics_inverse.angular_z, 4);
+            memcpy((uint8_t *)(com_tx_data + 12), (uint8_t *)&kinematics_forward.angular_z, 4);
+            com_tx_data[16] = 0x00;
+            com_tx_data[17] = 0x00;
+            com_tx_data[18] = 0x80;
+            com_tx_data[19] = 0x7f;
+            com_tx_done = false;
+            enableDMA(COM_UART_TX_CH);
             vTaskDelay(1);
-            EnableDMA(D_UART_TX_CH);
         }
+//        if (com_rx_idle) {
+//            memcpy((uint8_t *)com_tx_data, (uint8_t *)com_rx_data, count);
+//            DMA1->CH[3].CNDTR = count;
+//            enableDMA(COM_UART_TX_CH);
+//            enableDMA(COM_UART_RX_CH);
+//            com_rx_idle = false;
+//        }
     }
 }
-
-// 调pid参数
-void debugRxTask(void *pvParameters) {
-    taskENTER_CRITICAL();
-    debug_rx_done = false;
-    gpio_init(H2, GPO, GPIO_HIGH, GPO_PUSH_PULL);
-    taskEXIT_CRITICAL();
-    
-    while (true) {
-        if (debug_rx_done) {
-            IncPID *pid = NULL;
-            uint8_t idx = *(uint8_t *)(debug_rx_data);
-            uint32_t type = *(uint32_t *)(debug_rx_data + 4);
-            swap(debug_rx_data + 8, debug_rx_data + 11);
-            swap(debug_rx_data + 9, debug_rx_data + 10);
-            float value = *(float *)(debug_rx_data + 8);
-            
-            switch (idx) {
-                case 0u: speed = value; break;
-                case 1u: pid = &pid1; break;
-                case 2u: pid = &pid2; break;
-                case 3u: pid = &pid3; break;
-                case 4u: pid = &pid4; break;
-                default: break;
-            }
-            
-            if (pid != NULL) {
-                gpio_set_level(H2, GPIO_LOW);
-                vTaskDelay(20);
-                gpio_set_level(H2, GPIO_HIGH);
-                if (type == 0u) pid->P = value;
-                else if (type == 1u) pid->I = value;
-                else if (type == 2u) pid->D = value;
-            }
-            
-            debug_rx_done = false;
-            EnableDMA(D_UART_RX_CH);
-        }
-    }
-    
-}
-
 
 void freertos_init() {
     xTaskCreate(kinematicsTask, "kinematics_task", 128, NULL, 3, NULL);
-    xTaskCreate(debugTxTask, "debug_tx_task", 128, NULL, 3, NULL);
-    xTaskCreate(debugRxTask, "debug_rx_task", 128, NULL, 3, NULL);
+    xTaskCreate(testTask, "test_task", 128, NULL, 3, NULL);
 }
