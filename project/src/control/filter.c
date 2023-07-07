@@ -16,8 +16,7 @@ void filterInit(Filter *filter, float a) {
  *  输入参数: 结构体参数
  *  返 回 值: None
  */
-float lowPassFilter(Filter *filter)
-{   
+float lowPassFilter(Filter *filter) {   
 	filter->out_value = filter->a * filter->sample_value +  (1 - filter->a) * filter->out_value ;   
 	return filter->sample_value;
 } 

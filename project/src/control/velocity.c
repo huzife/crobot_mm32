@@ -34,7 +34,7 @@ void velocityControl(Velocity *vel) {
     vel->m4_set_rpm = constrain(vel->m4_set_rpm, -RPM_MAX, RPM_MAX);
     
     // 消除静止时速度误差
-    if (isZero(vel->m1_set_rpm) && isZero(vel->m2_set_rpm) && isZero(vel->m3_set_rpm) && isZero(vel->m4_set_rpm)) {
+    if (fequal(vel->m1_set_rpm, 0) && fequal(vel->m2_set_rpm, 0) && fequal(vel->m3_set_rpm, 0) && fequal(vel->m4_set_rpm, 0)) {
         pwm_m1 = 0;
         pwm_m2 = 0;
         pwm_m3 = 0;
@@ -129,22 +129,3 @@ void velocityControl(Velocity *vel) {
         motorSetDir(M4_DIR_PIN, M4_REVERSE);    // 电机4 反转
     }
 }
-
-// 判断转速是否为零
-inline bool isZero(float rpm) {
-    return fabs(rpm) < 0.005f;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-

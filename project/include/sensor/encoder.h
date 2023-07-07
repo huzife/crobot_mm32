@@ -25,7 +25,6 @@ typedef struct {
 
 void encoderInit(Encoder *encoder); // 初始化编码器结构体参数
 void encoderUpdateValue(Encoder *encoder, int16_t count, int8_t sign); // 编码器计数更新
-void encoderUpdateValue2(Encoder *encoder, int16_t count, int8_t sign); // 编码器计数更新
 int16_t encoderGetCount(encoder_index_enum encoder_n);  // 读取编码器计数
 
 #endif  // _ENCODER_H

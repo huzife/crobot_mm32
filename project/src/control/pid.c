@@ -54,7 +54,7 @@ void PosPIDInit(PosPID *PID, float P, float I, float D, float integral_error_min
 /**
  *  函数功能：增量式PID计算函数
  *  入口参数：PID结构体参数，测量值，目标值
- *  返回  值：电机PWM
+ *  返 回 值：电机PWM
  *  根据增量式离散PID公式 
  *  pwm+=Kp[e（k）-e(k-1)]+Ki*e(k)+Kd[e(k)-2e(k-1)+e(k-2)]
  *  e(k)代表本次偏差 
@@ -73,11 +73,10 @@ float incrementalPID(IncPID *PID, float next_point, float set_point) {
     return value;
 }
 
-
 /**
  *  函数功能：位置式PID计算函数
  *  入口参数：PID结构体参数，测量值，目标值
- *  返回  值：电机PWM
+ *  返 回 值：电机PWM
  *  根据位置式离散PID公式 
  *  pwm=Kp*e(k)+Ki*∑e(k)+Kd[e（k）-e(k-1)]
  *  e(k)代表本次偏差 

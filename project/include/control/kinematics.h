@@ -18,7 +18,8 @@ typedef struct {
 	__IO float m4_rpm;	    //M4电机转速 rpm
 } Kinematics;
 
-void Vel_To_RPM(Kinematics *kinematics);//4WD运动学逆解函数
-void RPM_To_Vel(Kinematics *kinematics);//4WD运动学正解函数	
+void kinematicsInit(Kinematics *kinematics);    // 初始化运动学结构体
+void Vel_To_RPM(Kinematics *kinematics);    // 4WD运动学逆解函数
+void RPM_To_Vel(Kinematics *kinematics);    // 4WD运动学正解函数	
 
 #endif  // _KINEMATICS_H

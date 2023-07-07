@@ -4,20 +4,14 @@
 #include "task.h"
 #include "stdio.h"
 
-// 交换字节
-void swap(uint8_t *a, uint8_t *b) {
-    uint8_t temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
+// 底层电机控制和速度反馈
 void kinematicsTask(void *pvParameters) {
     taskENTER_CRITICAL();
     // 初始化PWM
-    pwm_init(M1_PWM, 21000, 0);
-    pwm_init(M2_PWM, 21000, 0);
-    pwm_init(M3_PWM, 21000, 0);
-    pwm_init(M4_PWM, 21000, 0);
+    pwm_init(M1_PWM, 21000, PWM_DUTY_MAX);
+    pwm_init(M2_PWM, 21000, PWM_DUTY_MAX);
+    pwm_init(M3_PWM, 21000, PWM_DUTY_MAX);
+    pwm_init(M4_PWM, 21000, PWM_DUTY_MAX);
     
     // 初始化编码器模式
     encoder_quad_init(E1_TIM, E1_TIM_CH1, E1_TIM_CH2);
@@ -37,6 +31,10 @@ void kinematicsTask(void *pvParameters) {
     encoderInit(&encoder3);
     encoderInit(&encoder4);
     
+    // 初始化运动学结构体
+    kinematicsInit(&kinematics_inverse);
+    kinematicsInit(&kinematics_forward);
+    
     // 初始化滤波结构体
     filterInit(&filter1, 0.03);
     filterInit(&filter2, 0.03);
@@ -45,18 +43,8 @@ void kinematicsTask(void *pvParameters) {
     
     taskEXIT_CRITICAL();
     
-    uint32 i = 0;
-    uint8 stop = false;
-    kinematics_inverse.linear_x = 0;
-    
     while (true) {
         vTaskDelay(1);
-        
-        if (++i == 200) {
-            i = 0;
-            kinematics_inverse.linear_x = stop ? 0 : 0.1f;
-            stop = !stop;
-        }
         
         // 计算转速
         Vel_To_RPM(&kinematics_inverse);
@@ -87,39 +75,39 @@ void kinematicsTask(void *pvParameters) {
     }
 }
 
-void testTask(void *pvParameters) {
+// 与上层板通信
+void communicationTask(void *pvParameters) {
     taskENTER_CRITICAL();
-    testUartInit();
-    disableDMA(COM_UART_TX_CH);
+    comUartInit();
+    heartbeatTimInit();
+    message_queue = xQueueCreate(100, sizeof(uint8_t));
+    parserInit(&parser, 64);
     com_tx_done = true;
-    com_rx_idle = false;
     taskEXIT_CRITICAL();
     
     while (true) {
-        if (com_tx_done) {
-            memcpy((uint8_t *)com_tx_data, (uint8_t *)&kinematics_inverse.linear_x, 4);
-            memcpy((uint8_t *)(com_tx_data + 4), (uint8_t *)&kinematics_forward.linear_x, 4);
-            memcpy((uint8_t *)(com_tx_data + 8), (uint8_t *)&kinematics_inverse.angular_z, 4);
-            memcpy((uint8_t *)(com_tx_data + 12), (uint8_t *)&kinematics_forward.angular_z, 4);
-            com_tx_data[16] = 0x00;
-            com_tx_data[17] = 0x00;
-            com_tx_data[18] = 0x80;
-            com_tx_data[19] = 0x7f;
-            com_tx_done = false;
-            enableDMA(COM_UART_TX_CH);
-            vTaskDelay(1);
+        vTaskDelay(1);
+        
+        // 接收并解析数据帧
+        if (message_queue != NULL) {
+            while (!parser.flag) {
+                uint8_t data;
+                if (xQueueReceive(message_queue, &data, 0) == pdTRUE) {
+                    parse(&parser, data);
+                }
+            }
         }
-//        if (com_rx_idle) {
-//            memcpy((uint8_t *)com_tx_data, (uint8_t *)com_rx_data, count);
-//            DMA1->CH[3].CNDTR = count;
-//            enableDMA(COM_UART_TX_CH);
-//            enableDMA(COM_UART_RX_CH);
-//            com_rx_idle = false;
-//        }
+        
+        // 处理数据帧
+        if (com_tx_done && parser.flag) {
+            com_tx_done = false;
+            parser.flag = false;
+            processData((uint8_t *)parser.buf);
+        }
     }
 }
 
-void freertos_init() {
+void freertosInit() {
     xTaskCreate(kinematicsTask, "kinematics_task", 128, NULL, 3, NULL);
-    xTaskCreate(testTask, "test_task", 128, NULL, 3, NULL);
+    xTaskCreate(communicationTask, "communication_task", 128, NULL, 3, NULL);
 }

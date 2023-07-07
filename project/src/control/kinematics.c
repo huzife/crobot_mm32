@@ -4,7 +4,22 @@
 /**
  *  函数功能：4WD运动学逆解函数
  *  入口参数：车体运动学结构体参数
- *  返回  值：通过输入车体的线速度与角速度计算出4个电机的转速
+ *  返 回 值：通过输入车体的线速度与角速度计算出4个电机的转速
+ */
+void kinematicsInit(Kinematics *kinematics) {
+    kinematics->linear_x = 0.0f;
+    kinematics->linear_y = 0.0f;
+    kinematics->angular_z = 0.0f;
+    kinematics->m1_rpm = 0.0f;
+    kinematics->m2_rpm = 0.0f;
+    kinematics->m3_rpm = 0.0f;
+    kinematics->m4_rpm = 0.0f;
+}
+
+/**
+ *  函数功能：4WD运动学逆解函数
+ *  入口参数：车体运动学结构体参数
+ *  返 回 值：通过输入车体的线速度与角速度计算出4个电机的转速
  */
 void Vel_To_RPM(Kinematics *kinematics)
 {
@@ -35,7 +50,7 @@ void Vel_To_RPM(Kinematics *kinematics)
 /**
  *  函数功能：4WD运动学正解函数
  *  参    数：车体速度结构体参数，4WD电机转速结构体参数
- *  返回  值：通过输入4个电机的转速计算出车体的线速度与角速度
+ *  返 回 值：通过输入4个电机的转速计算出车体的线速度与角速度
  */
 void RPM_To_Vel(Kinematics *kinematics)
 {

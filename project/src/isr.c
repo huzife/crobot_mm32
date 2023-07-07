@@ -102,7 +102,8 @@ void TIM5_IRQHandler (void)
 void TIM6_IRQHandler (void)
 {
     // 此处编写用户代码
-
+    extern void tim6_irq_handler();
+    tim6_irq_handler();
     // 此处编写用户代码
     TIM_ClearInterruptStatus((TIM_Type *)TIM6, TIM_GetInterruptStatus((TIM_Type *)TIM6));
 }

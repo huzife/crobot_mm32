@@ -23,6 +23,5 @@ typedef struct{
 } Velocity;
 
 void velocityControl(Velocity *vel);    // 4WD速度闭环控制函数
-bool isZero(float rpm); // 判断转速是否为零
 
 #endif  // _VELOCITY_H

@@ -1,10 +1,21 @@
 #include "sensor/encoder.h"
 
+/**
+ *  函数功能：编码器结构体初始化
+ *  入口参数：编码器结构体指针
+ *  返 回 值：None
+ */
 void encoderInit(Encoder *encoder) {
     encoder->last_count = 0;
     encoder->d_value = 0;
 }
 
+/**
+ *  函数功能：更新编码器数值
+ *  入口参数：编码器结构体指针、编码器计数值、方向符号
+ *  返 回 值：None
+ *  说    明：左右两边轮子计数方向不同，所以需要sign处理
+ */
 void encoderUpdateValue(Encoder *encoder, int16_t count, int8_t sign) {
     // 处理编码器计数方向
     count *= sign;
@@ -19,36 +30,11 @@ void encoderUpdateValue(Encoder *encoder, int16_t count, int8_t sign) {
     encoder->last_count = count;
 }
 
-int8_t sgn(int16_t a)//符号函数
-{
-	if(a>0) return 1;
-	else if(a<0) return -1;
-	else return 0;
-}
-
-void encoderUpdateValue2(Encoder *encoder, int16_t count, int8_t sign) {
-    int16_t count_static = count * sign;
-    
-    if (sgn(count_static) != sgn(encoder->last_count)) {
-        uint16_t i1 = abs(count_static) + abs(encoder->last_count);
-        uint16_t i2 = 65536 - i1;
-        if (i1 < i2) {
-            if (count_static > encoder->last_count) encoder->d_value = i1;
-            else encoder->d_value = -i1;
-        }
-        else {
-            if (count_static > encoder->last_count) encoder->d_value = -i2;
-            else encoder->d_value = i2;
-        }
-    }
-    else {
-        encoder->d_value = count_static - encoder->last_count;
-    }
-    
-    encoder->last_count = count_static;
-    
-}
-
+/**
+ *  函数功能：读取编码器计数值
+ *  入口参数：编码器枚举值
+ *  返 回 值：编码器计数值
+ */
 int16_t encoderGetCount(encoder_index_enum encoder_n) {
     uint32_t result = 0;
     switch(encoder_n) {

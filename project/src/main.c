@@ -9,16 +9,16 @@
 // variables
 
 // functions
-void freertos_init();
+void freertosInit();
 
 // code
 int main (void) {
     clock_init(SYSTEM_CLOCK_120M);                                              // 初始化芯片时钟 工作频率为 120MHz
 
     // 此处编写用户代码 例如外设初始化代码等
-    
-    freertos_init();
+    freertosInit();
     vTaskStartScheduler();
+    
     // 此处编写用户代码 例如外设初始化代码等
 
     while(1) {

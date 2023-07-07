@@ -12,8 +12,8 @@
 #define COM_UART_RX_CH      UART1_RX_CH
 
 #define COM_DATA_WIDTH    8u
-#define COM_DATA_TX_SIZE  20u
-#define COM_DATA_RX_SIZE  12u
+#define COM_DATA_TX_SIZE  64u
+#define COM_DATA_RX_SIZE  64u
 
 //extern UART_Type *uart_index[UART_NUM];
 //extern IRQn_Type uart_irq[UART_NUM];

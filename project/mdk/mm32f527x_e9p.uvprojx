@@ -419,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\driver\dma.c</FilePath>
             </File>
+            <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\driver\tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -448,6 +453,11 @@
               <FileName>motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\control\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>data_com.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\control\data_com.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,5 +1,6 @@
 #ifndef _MOTOR_H
 #define _MOTOR_H
+
 #include "zf_common_headfile.h"
 
 #define MOTOR_PWM_MAX PWM_DUTY_MAX  //PWM最大值
@@ -36,7 +37,5 @@
 void motorDirInit(gpio_pin_enum pin);   // 控制电机方向输出初始化(gpio)
 void motorSetSpeed(pwm_channel_enum pwm, const uint32 duty);    // 设置pwm输出
 void motorSetDir(gpio_pin_enum pin, gpio_level_enum dir);   // 设置电机方向
-void motorSetDirForward(gpio_pin_enum DIR); // 电机正转
-void motorSetDirReverse(gpio_pin_enum DIR); // 电机反转
 
 #endif  // _MOTOR_H
