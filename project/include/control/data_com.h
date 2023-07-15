@@ -7,7 +7,8 @@
 typedef enum {
     NONE = 0,
     SET_SPEED,
-    GET_SPEED_INFO
+    GET_SPEED,
+    GET_TEMP_AND_HUM
 } FunctionCode;
 
 // 数据解析结构体

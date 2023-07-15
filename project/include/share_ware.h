@@ -10,6 +10,7 @@
 #include "driver/uart.h"
 #include "driver/dma.h"
 #include "driver/tim.h"
+#include "driver/i2c.h"
 
 // control
 #include "control/kinematics.h"
@@ -21,6 +22,7 @@
 
 // sensor
 #include "sensor/encoder.h"
+#include "sensor/shtc3.h"
 
 // 浮点数-十六进制转换
 typedef union {
@@ -63,6 +65,8 @@ extern Encoder encoder3;    // 创建编码器结构体3
 extern Encoder encoder4;    // 创建编码器结构体4
 
 extern Parser parser;   // 数据解析器结构体
+
+extern SHTC3 shtc3; // shtc3传感器结构体
 
 
 float constrain(float amt, float min, float max);   // 数值约束函数

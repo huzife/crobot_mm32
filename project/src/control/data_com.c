@@ -129,7 +129,7 @@ void processData(uint8_t *buf) {
         }
         
         // 功能2：获取车体速度
-        case GET_SPEED_INFO: {
+        case GET_SPEED: {
             // 获取线速度x
             float_hex.float_value = kinematics_forward.linear_x;
             for (int i = 0; i < 4; i++) {
@@ -151,12 +151,39 @@ void processData(uint8_t *buf) {
             // 其他字节
             com_tx_data[0] = 0xFE;
             com_tx_data[1] = 0xEF;
-            com_tx_data[2] = 0x01;
+            com_tx_data[2] = 0x0D;
             com_tx_data[3] = 0x02;
             com_tx_data[16] = calcCheckSum((uint8_t *)com_tx_data, 16);
             
             // 发送数据帧
             DMA1->CH[3].CNDTR = 17;
+            enableDMA(COM_UART_TX_CH);
+            break;
+        }
+        
+        // 功能3：获取温湿度
+        case GET_TEMP_AND_HUM: {
+            // 获取温度
+            float_hex.float_value = shtc3.temperature;
+            for (int i = 0; i < 4; i++) {
+                com_tx_data[4 + i] = float_hex.hex[3 - i];
+            }
+            
+            // 获取湿度
+            float_hex.float_value = shtc3.humidity;
+            for (int i = 0; i < 4; i++) {
+                com_tx_data[8 + i] = float_hex.hex[3 - i];
+            }
+        
+            // 其他字节
+            com_tx_data[0] = 0xFE;
+            com_tx_data[1] = 0xEF;
+            com_tx_data[2] = 0x09;
+            com_tx_data[3] = 0x03;
+            com_tx_data[12] = calcCheckSum((uint8_t *)com_tx_data, 12);
+            
+            // 发送数据帧
+            DMA1->CH[3].CNDTR = 13;
             enableDMA(COM_UART_TX_CH);
             break;
         }

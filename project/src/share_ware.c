@@ -36,6 +36,8 @@ Encoder encoder4;   // 创建编码器结构体4
 
 Parser parser;   // 数据解析器结构体
 
+SHTC3 shtc3; // shtc3传感器结构体
+
 
 // 数值约束函数
 float constrain(float amt, float min, float max) {

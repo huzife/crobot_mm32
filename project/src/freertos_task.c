@@ -107,7 +107,20 @@ void communicationTask(void *pvParameters) {
     }
 }
 
+// 温湿度传感器任务
+void shtc3Task(void *pvParameters) {
+    taskENTER_CRITICAL();
+    SHTC3_Init();
+    taskEXIT_CRITICAL();
+    
+    while (true) {
+        vTaskDelay(configTICK_RATE_HZ);
+        SHTC3_MEASURE(&shtc3);
+    }
+}
+
 void freertosInit() {
     xTaskCreate(kinematicsTask, "kinematics_task", 128, NULL, 3, NULL);
     xTaskCreate(communicationTask, "communication_task", 128, NULL, 3, NULL);
+    xTaskCreate(shtc3Task, "shtc3_task", 128, NULL, 3, NULL);
 }

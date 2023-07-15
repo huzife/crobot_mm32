@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\driver\tim.c</FilePath>
             </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\driver\i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -468,6 +473,11 @@
               <FileName>encoder.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sensor\encoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>shtc3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sensor\shtc3.c</FilePath>
             </File>
           </Files>
         </Group>
