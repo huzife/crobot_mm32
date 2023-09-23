@@ -53,9 +53,9 @@ void timClear(timer_index_enum tim_n) {
 }
 
 void tim6_irq_handler() {
-    gpio_toggle_level(H2);
-    system_delay_ms(50);
-    gpio_toggle_level(H2);
+//    gpio_toggle_level(H2);
+//    system_delay_ms(50);
+//    gpio_toggle_level(H2);
     kinematics_inverse.linear_x = 0;
     kinematics_inverse.linear_y = 0;
     kinematics_inverse.angular_z = 0;

@@ -43,6 +43,9 @@ void kinematicsTask(void *pvParameters) {
     
     taskEXIT_CRITICAL();
     
+    int i = 0;
+    uint8_t flag = true;
+    
     while (true) {
         vTaskDelay(1);
         
@@ -121,6 +124,6 @@ void shtc3Task(void *pvParameters) {
 
 void freertosInit() {
     xTaskCreate(kinematicsTask, "kinematics_task", 128, NULL, 3, NULL);
-    xTaskCreate(communicationTask, "communication_task", 128, NULL, 3, NULL);
+    xTaskCreate(communicationTask, "communication_task", 128, NULL, 1, NULL);
     xTaskCreate(shtc3Task, "shtc3_task", 128, NULL, 3, NULL);
 }

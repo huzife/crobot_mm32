@@ -87,7 +87,7 @@ float incrementalPID(IncPID *PID, float next_point, float set_point) {
 float positionPID(PosPID *PID, float next_point, float set_point) {	
     PID->error = set_point - next_point;
 	
-    PID->integral_error +=  PID->error;
+    PID->integral_error += PID->error;
     
     // 积分限幅，防止累积值一直增大
     if(PID->integral_error > PID->integral_error_max) 

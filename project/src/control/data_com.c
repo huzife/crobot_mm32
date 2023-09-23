@@ -163,6 +163,9 @@ void processData(uint8_t *buf) {
         
         // 功能3：获取温湿度
         case GET_TEMP_AND_HUM: {
+//        gpio_low(H2);
+//        vTaskDelay(2);
+//        gpio_high(H2);
             // 获取温度
             float_hex.float_value = shtc3.temperature;
             for (int i = 0; i < 4; i++) {
